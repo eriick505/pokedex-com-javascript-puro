@@ -1,4 +1,7 @@
+const searchInput = document.querySelector('#search')
 const pokedex = document.querySelector('[data-js="pokedex"]')
+const searchContainer = document.querySelector('.searchContainer')
+
 
 const API = 'https://pokeapi.co/api/v2/pokemon'
 
@@ -29,14 +32,48 @@ const insertPokemonsIntoDOM = pokemons => {
   pokedex.innerHTML = pokemons;
 }
 
-const getPokemonInfo = pokemon => {
-  console.log(pokemon );
+const activeSearchContainerSticky = () => {
+  const { scrollTop } = document.documentElement
+  const isTopGreaterThanZero = scrollTop >= 210
+
+  if(isTopGreaterThanZero) {
+    searchContainer.classList.add('active')
+    return
+  }
+
+  searchContainer.classList.remove('active')
 }
 
-const fetchPokemonInfo = async id => {
-  const response = await fetch(`${API}/${id}`)
-  const data = await response.json()
+const removeNumberAndDots = string => string.replace(/[0-9]/g, '').replace('. ', '')
 
-  getPokemonInfo(data)
+const getSearchInputValue = element => element.target.value.toLowerCase();
+
+const pokemonFilter = event => {
+  const inputValue = getSearchInputValue(event)
+  const cards = document.querySelectorAll('.card')
+
+  cards.forEach(card => {
+    const h2 = card.querySelector('h2').textContent.toLowerCase()
+    const h2WithoutNumbersAndDots = removeNumberAndDots(h2)
+
+    if(h2WithoutNumbersAndDots.includes(inputValue)){
+      card.style = "display: block"
+      return
+    }
+    card.style = "display: none"
+  })
 }
 
+// const getPokemonInfo = pokemon => {
+//   console.log(pokemon );
+// }
+
+// const fetchPokemonInfo = async id => {
+//   const response = await fetch(`${API}/${id}`)
+//   const data = await response.json()
+
+//   getPokemonInfo(data)
+// }
+
+searchInput.addEventListener('input', pokemonFilter)
+window.addEventListener('scroll', activeSearchContainerSticky)
