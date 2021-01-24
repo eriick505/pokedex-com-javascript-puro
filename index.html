@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>PokeDex</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css" />
   <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet" />
 </head>
@@ -17,6 +18,55 @@
   <div class="container">
     <h1>Pokedex</h1>
     <ul data-js="pokedex" class="pokedex"></ul>
+  </div>
+
+  <div class="popup">
+    <div class="popup__content grass">
+      <button class="popup__close">x</button>
+      
+      <div class="popup__header">
+        <h2>Bulbassaur</h2>
+        <ul class="types">
+          <li>Grass</li>
+          <li>Poison</li>
+        </ul>
+
+        <img src="https://pokeres.bastionbot.org/images/pokemon/1.png" alt="pokemon">
+      </div>
+
+      <div class="popup__body">
+        <ul class="menu">
+          <li class="active">About</li>
+          <li>Moves</li>
+          <li>Evolutions</li>
+        </ul>
+
+        <div class="tables">
+          <table>
+            <tbody>
+              <tr>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>marks</td>
+              </tr>
+              <tr>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+                <td>flouflis</td>
+              </tr>
+              <tr>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+                <td>@123sd</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
   
   <script src="./app.js"></script>

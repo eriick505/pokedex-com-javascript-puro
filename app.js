@@ -1,7 +1,8 @@
 const searchInput = document.querySelector('#search')
 const pokedex = document.querySelector('[data-js="pokedex"]')
 const searchContainer = document.querySelector('.searchContainer')
-
+const popup = document.querySelector('.popup')
+const popupCloseBtn = document.querySelector('.popup__close')
 
 const API = 'https://pokeapi.co/api/v2/pokemon'
 
@@ -64,16 +65,24 @@ const pokemonFilter = event => {
   })
 }
 
-// const getPokemonInfo = pokemon => {
-//   console.log(pokemon );
-// }
+const openPopup = () => popup.style.display = 'block'
 
-// const fetchPokemonInfo = async id => {
-//   const response = await fetch(`${API}/${id}`)
-//   const data = await response.json()
+const closePopup = event => {
+  const isElementHasClasses = ['popup', 'popup__close'] 
+  const elementClassTarget = event.target.getAttribute('class')
 
-//   getPokemonInfo(data)
-// }
+  isElementHasClasses.map(item => {
+    if(elementClassTarget === item) {
+      popup.style.display = 'none'
+      return
+    }
+  })
+}
 
+const fetchPokemonInfo = async id => {
+  openPopup()
+}
+
+popup.addEventListener('click', closePopup)
 searchInput.addEventListener('input', pokemonFilter)
 window.addEventListener('scroll', activeSearchContainerSticky)
