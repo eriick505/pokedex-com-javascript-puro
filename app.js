@@ -20,7 +20,7 @@ const listPokemonTemplateHTML = pokemons => {
 
     accumulator += `
       <li class="card ${typesInfo[0]}" onClick="fetchPokemonInfo(${id})">
-        <img class="card-image" src="https://pokeres.bastionbot.org/images/pokemon/${id}.png" alt="${name}" />
+        <img class="card-image" src="${getPokemonImageByID(id)}" alt="${name}" />
         <h2 class="card-title">${id}. ${name}</h2>
         <p class="card-subtitle">${typesInfo.join(' | ')}</p>
       </li>
@@ -28,6 +28,8 @@ const listPokemonTemplateHTML = pokemons => {
     return accumulator;
   }, '')
 }
+
+const getPokemonImageByID = ID => `https://pokeres.bastionbot.org/images/pokemon/${ID}.png`
 
 const insertPokemonsIntoDOM = pokemons => {
   pokedex.innerHTML = pokemons;
@@ -68,12 +70,14 @@ const pokemonFilter = event => {
 const openPopup = () => popup.style.display = 'block'
 
 const closePopup = event => {
+  const popupContent = document.querySelector('.popup__content');
   const isElementHasClasses = ['popup', 'popup__close'] 
   const elementClassTarget = event.target.getAttribute('class')
 
   isElementHasClasses.map(item => {
     if(elementClassTarget === item) {
       popup.style.display = 'none'
+      popupContent.innerHTML = ''
       return
     }
   })
@@ -81,6 +85,37 @@ const closePopup = event => {
 
 const fetchPokemonInfo = async id => {
   openPopup()
+
+  const popupContent = document.querySelector('.popup__content');
+
+  const response = await fetch(`${API}/${id}`)
+  const pokemon = await response.json();
+
+  const typesInfo = pokemon.types.map(({ type }) => `<li>${type.name}</li>`)
+
+  const popUpHeader = document.createElement('div')
+  popUpHeader.classList.add('popup__header')
+  popUpHeader.innerHTML = `
+    <h2>${pokemon.name}</h2>
+    <ul class="types">
+      ${typesInfo.join('')}
+    </ul>
+
+    <img src="https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png" alt="${pokemon.name}">
+  `
+
+  popupContent.prepend(popUpHeader)
+  // const templatePopupHeader = `
+  //   <div class="popup__header">
+  //     <h2>${pokemon.name}</h2>
+  //     <ul class="types">
+  //       ${typesInfo.join('')}
+  //     </ul>
+
+  //     <img src="https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png" alt="${pokemon.name}">
+  //   </div>
+  // `
+  // popupContent.innerHTML += templatePopupHeader
 }
 
 popup.addEventListener('click', closePopup)
