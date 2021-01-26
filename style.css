@@ -210,7 +210,7 @@ h1 {
 	display: none;
 }
 
-.popup__content {
+.popup__box {
 	border-radius: 14px;
 	box-shadow: 3px 3px 7px 1px rgba(3, 3, 3, 0.24);
 	color: #333;
@@ -247,6 +247,10 @@ h1 {
 .popup__body {
 	padding-right: 14px;
 	padding-left: 14px;
+}
+
+.popup__header h2 {
+	text-transform: capitalize;
 }
 
 .popup__header .types {
