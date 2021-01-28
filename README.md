@@ -1,2 +1,2 @@
 # pokedex-com-javascript-puro
-[desenvolvimento] Pokedex com javascript puro + PokeApi
+[Em desenvolvimento] Pokedex com javascript puro + PokeApi

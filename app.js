@@ -17,8 +17,9 @@ Promise.all(fetchPokemonPromises())
   .then(listPokemons => insertPokemonsIntoDOM(listPokemons))
 
 const listPokemonTemplateHTML = pokemons => {
-  return pokemons.reduce((accumulator, { id, name, types }) => {
-    const typesInfo = types.map(({ type }) => type.name)
+  return pokemons.reduce((accumulator, pokemon) => {
+    const { id, name } = pokemon
+    const typesInfo = pokemonTypesAsArray(pokemon)
 
     accumulator += `
       <li class="card ${typesInfo[0]}" onClick="fetchPokemonInfo(${id})">
@@ -30,6 +31,8 @@ const listPokemonTemplateHTML = pokemons => {
     return accumulator;
   }, '')
 }
+
+const pokemonTypesAsArray = ({ types }) => types.map(({ type }) => type.name)
 
 const getPokemonImageByID = ID => `https://pokeres.bastionbot.org/images/pokemon/${ID}.png`
 
@@ -51,10 +54,8 @@ const activeSearchContainerSticky = () => {
 
 const removeNumberAndDots = string => string.replace(/[0-9]/g, '').replace('. ', '')
 
-const getSearchInputValue = element => element.target.value.toLowerCase();
-
 const pokemonFilter = event => {
-  const inputValue = getSearchInputValue(event)
+  const inputValue = event.target.value.toLowerCase();
   const cards = document.querySelectorAll('.card')
 
   cards.forEach(card => {
@@ -102,23 +103,17 @@ const createElement = (elementName, attributes) => {
   return element;
 }
 
-const handleWithPopupInfo = pokemon => {
-  const typesInfo = pokemon.types.map(({ type }) => type.name)
-
-  const typesLi = typesInfo.reduce((acc, item) => {
+const createPopupHeader = pokemon => {
+  const typesLi = pokemonTypesAsArray(pokemon).reduce((acc, item) => {
     acc += `<li>${item}</li>`
     return acc;
   }, '');
-  
+
   const popUpHeader = createElement('div', {
     class: 'popup__header'
   })
 
-  const popUpBody = createElement('div', {
-    class: 'popup__body'
-  })
-
-  const popUpHeaderTemplate = `
+  const templateHeader = `
     <h2>${pokemon.name}</h2>
     <ul class="types">
       ${typesLi}
@@ -127,13 +122,25 @@ const handleWithPopupInfo = pokemon => {
       src="https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png" 
       alt="${pokemon.name}">
   `
-  const popUpBodyTemplate = `
+  popUpHeader.innerHTML = templateHeader
+
+  return popUpHeader
+}
+
+const createPopupBody = pokemon => {
+  const popUpBody = createElement('div', {
+    class: 'popup__body'
+  })
+
+  const getHability = pokemon.abilities[0].ability.name
+  console.log(getHability);
+
+  const templateBody = `
     <ul class="menu">
       <li class="active">About</li>
       <li>Moves</li>
       <li>Evolutions</li>
     </ul>
-
     <div class="tables">
       <table>
         <tbody>
@@ -147,13 +154,21 @@ const handleWithPopupInfo = pokemon => {
       </table>
     </div>
   `
-  popUpHeader.innerHTML = popUpHeaderTemplate
-  popUpBody.innerHTML = popUpBodyTemplate
+  popUpBody.innerHTML = templateBody
 
-  popupContent.appendChild(popUpHeader)
-  popupContent.appendChild(popUpBody)
+  return popUpBody
+}
+
+const handleWithPopupInfo = pokemon => {
+  const typesInfo = pokemonTypesAsArray(pokemon)
+  const popupHeader = createPopupHeader(pokemon)
+  const popupBody = createPopupBody(pokemon)
+
+  popupContent.appendChild(popupHeader)
+  popupContent.appendChild(popupBody)
 
   popUpBox.classList.add(typesInfo[0])
+
   openPopup()
 }
 
