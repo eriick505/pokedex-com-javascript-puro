@@ -80,6 +80,7 @@ h1 {
 	text-align: center;
 	border-radius: 20px;
 	position: relative;
+	cursor: pointer;
 }
 
 .card::after {
@@ -182,22 +183,7 @@ h1 {
 	z-index: 2;
 }
 
-@keyframes bounce {
-	20% {
-			transform: translateY(-6px);
-	}
-	40% {
-			transform: translateY(0px);
-	}
-
-	80% {
-			transform: translateY(-2px);
-	}
-	100% {
-			transform: translateY(0);
-	}
-}
-
+/******* POPUP *******/
 .popup {
 	position: fixed;
 	top: 0;
@@ -210,15 +196,30 @@ h1 {
 	display: none;
 }
 
+.popup__content {
+	background-image: url(./assets/img/logo-pokemon.png);
+	background-position: top right;
+	background-repeat: no-repeat;
+	background-size: 49%;
+	margin-top: 34px;
+}
+
 .popup__box {
 	border-radius: 14px;
-	box-shadow: 3px 3px 7px 1px rgba(3, 3, 3, 0.24);
+	box-shadow: 3px 3px 10px 1px rgb(3 3 3 / 40%);
 	color: #333;
 	margin: 30px auto 0;
 	max-width: 480px;
 	position: relative;
 	width: 100%;
 	overflow: hidden;
+	transition: all .2s ease-in-out;
+}
+
+.animateSlideDown {
+	animation-name: slideDown;
+  animation-duration: .3s;
+  animation-fill-mode: forwards;
 }
 
 .popup__close {
@@ -245,12 +246,33 @@ h1 {
 
 .popup__header,
 .popup__body {
-	padding-right: 14px;
-	padding-left: 14px;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+@media(min-width: 768px) {
+	.popup__header,
+	.popup__body {
+		padding-right: 14px;
+		padding-left: 14px;
+	}	
+}
+
+.popup__header {
+	position: relative;
 }
 
 .popup__header h2 {
 	text-transform: capitalize;
+}
+
+.popup__header .pokeId {
+	color: #0000003d;
+	font-size: 20px;
+	font-weight: 600;
+	position: absolute;
+	right: 20px;
+	top: 2px;
 }
 
 .popup__header .types {
@@ -261,7 +283,7 @@ h1 {
 	background-color: #fff;
 	border-radius: 18px;
 	padding: 2px 8px;
-	box-shadow: 2px 2px 6px 0 rgba(3, 3, 3, 0.05);
+	box-shadow: 2px 2px 6px 0 rgba(3, 3, 3, 0.12);
 	font-size: 14px;
 }
 
@@ -271,7 +293,7 @@ h1 {
 
 .popup__header img {
 	height: auto;
-	max-width: 50%;
+	max-width: 54%;
 	display: block;
 	margin: 0 auto;
 }
@@ -307,6 +329,113 @@ h1 {
 	width: 100%;
 }
 
-.popup__body table td {
-	width: 25%;
+
+/******* TABLES *******/
+.tables {
+	text-align: right;
+}
+
+.tables tr {
+	display: flex;
+	justify-content: space-around;
+}
+
+.tables tr:not(:last-child) {
+	margin-bottom: 8px;
+	text-transform: uppercase;
+}
+
+.tables tr td:first-child {
+	width: 32%;
+}
+
+.tables tr td:nth-child(2) {
+	width: 13%;
+	font-weight: 600;
+}
+
+.tables tr td:last-child {
+	width: 53%;
+}
+
+@media(min-width: 768px) {
+	.tables tr td:first-child {
+		width: 106px;
+		
+	}
+	
+	.tables tr td:nth-child(2) {
+		width: 50px;
+	}
+	
+	.tables tr td:last-child {
+		width: 257px;
+	}	
+}
+
+
+/******* SKILL BAR *******/
+.skillbar {
+	background-color: rgb(241, 241, 241);
+	height: 100%;
+	width: 100%;
+}
+
+.bar {
+	display: block;
+	height: 100%;
+}
+
+.hp {
+	background-color: #a7db8d;
+}
+
+.attack {
+	background-color: #ff5959;
+}
+
+.defense {
+	background-color: #9db7f5;
+}
+
+.special-attack {
+	background-color: #f39c12;
+}
+
+.special-defense {
+	background-color: #8395a7;
+}
+
+.speed {
+	background-color: #9b59b6;
+}
+
+
+/***** ANIMATIONS *****/
+@keyframes bounce {
+	20% {
+			transform: translateY(-8px);
+			
+	}
+	40% {
+			transform: translateY(0px);
+	}
+
+	80% {
+			transform: translateY(-4px);
+	}
+	100% {
+			transform: translateY(0);
+			box-shadow: 3px 3px 7px 1px rgba(3, 3, 3, 0.14);
+	}
+}
+
+@keyframes slideDown {
+	from {
+		transform: translateY(-75vh);
+	}
+
+	to {
+		transform: translateY(0);
+	}
 }

@@ -1,9 +1,11 @@
+import { createPopupHeader, createPopupBody } from './js/popup.js'
+import { pokemonTypesAsArray } from './js/utils.js'
+
 const searchInput = document.querySelector('#search')
 const pokedex = document.querySelector('[data-js="pokedex"]')
 const searchContainer = document.querySelector('.searchContainer')
 const popup = document.querySelector('.popup')
 const popUpBox = document.querySelector('.popup__box')
-const popupCloseBtn = document.querySelector('.popup__close')
 const popupContent = document.querySelector('.popup__content');
 
 const API = 'https://pokeapi.co/api/v2/pokemon'
@@ -22,7 +24,7 @@ const listPokemonTemplateHTML = pokemons => {
     const typesInfo = pokemonTypesAsArray(pokemon)
 
     accumulator += `
-      <li class="card ${typesInfo[0]}" onClick="fetchPokemonInfo(${id})">
+      <li class="card ${typesInfo[0]}" onclick="fetchPokemonInfo(${id})">
         <img class="card-image" src="${getPokemonImageByID(id)}" alt="${name}" />
         <h2 class="card-title">${id}. ${name}</h2>
         <p class="card-subtitle">${typesInfo.join(' | ')}</p>
@@ -31,8 +33,6 @@ const listPokemonTemplateHTML = pokemons => {
     return accumulator;
   }, '')
 }
-
-const pokemonTypesAsArray = ({ types }) => types.map(({ type }) => type.name)
 
 const getPokemonImageByID = ID => `https://pokeres.bastionbot.org/images/pokemon/${ID}.png`
 
@@ -63,7 +63,7 @@ const pokemonFilter = event => {
     const h2WithoutNumbersAndDots = removeNumberAndDots(h2)
 
     if(h2WithoutNumbersAndDots.includes(inputValue)){
-      card.style = "display: block"
+      card.style = "display: block;"
       return
     }
     card.style = "display: none"
@@ -76,87 +76,33 @@ const fetchPokemonInfo = async id => {
 
   handleWithPopupInfo(pokemon)
 }
+// TEMPORARY SOLUTION (Necessary refractory for addEventListener)
+window.fetchPokemonInfo = fetchPokemonInfo
 
-const openPopup = () => popup.style.display = 'block'
+const openPopup = () => {
+  popUpBox.classList.add('animateSlideDown')
+  popup.style.display = 'block'
+}
+
+const clearPopup = () => {
+  const classesPopupBox = popUpBox.classList
+  const classesPopupBoxAsArray = [ ...classesPopupBox ]
+  classesPopupBoxAsArray.filter(item => item !== 'popup__box' ? classesPopupBox.remove(item) : '')
+
+  popupContent.innerHTML = ''
+}
 
 const closePopup = event => {
   const isElementHasClasses = ['popup', 'popup__close'] 
   const elementClassTarget = event.target.getAttribute('class')
-  const typePokemonClass = popUpBox.classList.item(1)
 
   isElementHasClasses.map(item => {
     if(elementClassTarget === item) {
       popup.style.display = 'none'
-      popupContent.innerHTML = ''
-      popUpBox.classList.remove(typePokemonClass)
+      clearPopup()
       return
     }
   })
-}
-
-const createElement = (elementName, attributes) => {
-  const element = document.createElement(elementName)
-  const attributeAsArray = Object.entries(attributes)
-
-  attributeAsArray.forEach(([key, value]) => element.setAttribute(key, value))
-
-  return element;
-}
-
-const createPopupHeader = pokemon => {
-  const typesLi = pokemonTypesAsArray(pokemon).reduce((acc, item) => {
-    acc += `<li>${item}</li>`
-    return acc;
-  }, '');
-
-  const popUpHeader = createElement('div', {
-    class: 'popup__header'
-  })
-
-  const templateHeader = `
-    <h2>${pokemon.name}</h2>
-    <ul class="types">
-      ${typesLi}
-    </ul>
-    <img 
-      src="https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png" 
-      alt="${pokemon.name}">
-  `
-  popUpHeader.innerHTML = templateHeader
-
-  return popUpHeader
-}
-
-const createPopupBody = pokemon => {
-  const popUpBody = createElement('div', {
-    class: 'popup__body'
-  })
-
-  const getHability = pokemon.abilities[0].ability.name
-  console.log(getHability);
-
-  const templateBody = `
-    <ul class="menu">
-      <li class="active">About</li>
-      <li>Moves</li>
-      <li>Evolutions</li>
-    </ul>
-    <div class="tables">
-      <table>
-        <tbody>
-          <tr>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>marks</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  `
-  popUpBody.innerHTML = templateBody
-
-  return popUpBody
 }
 
 const handleWithPopupInfo = pokemon => {
