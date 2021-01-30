@@ -216,12 +216,6 @@ h1 {
 	transition: all .2s ease-in-out;
 }
 
-.animateSlideDown {
-	animation-name: slideDown;
-  animation-duration: .3s;
-  animation-fill-mode: forwards;
-}
-
 .popup__close {
 	background-color: #fff;
 	border-radius: 0 0 0 8px;
@@ -411,6 +405,18 @@ h1 {
 }
 
 
+.animateSlideDown {
+	animation-name: slideDown;
+  animation-duration: .3s;
+  animation-fill-mode: forwards;
+}
+
+.animateLargeToSmall {
+	animation: largeToSmall;
+	animation-duration: .3s;
+	animation-fill-mode: forwards;
+}
+
 /***** ANIMATIONS *****/
 @keyframes bounce {
 	20% {
@@ -439,3 +445,30 @@ h1 {
 		transform: translateY(0);
 	}
 }
+
+@keyframes largeToSmall {
+	0% {
+		transform: scale(1);
+	}
+
+	20% {
+		transform: scale(0.8);
+	}
+
+	40% {
+		transform: scale(0.6);
+	}
+
+	60% {
+		transform: scale(0.4);
+	}
+
+	80% {
+		transform: scale(0.2);
+	}
+
+	100% {
+		transform: scale(0);
+	}
+}
+

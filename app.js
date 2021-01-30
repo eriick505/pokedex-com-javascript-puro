@@ -98,8 +98,13 @@ const closePopup = event => {
 
   isElementHasClasses.map(item => {
     if(elementClassTarget === item) {
-      popup.style.display = 'none'
-      clearPopup()
+      popUpBox.classList.remove('animateSlideDown')
+      popUpBox.classList.add('animateLargeToSmall')
+
+      setTimeout(() => {
+        popup.style.display = 'none'
+        clearPopup()
+      }, 300)
       return
     }
   })
